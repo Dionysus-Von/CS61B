@@ -1,0 +1,22 @@
+2026-10-12，Windows，Temurin Java 21。
+固定随机种子 61，预先生成长度为 10 的小写字母字符串，各实现使用同一组键。
+只测插入耗时，包含插入触发的扩容，不包含字符串生成和排序。
+每种配置执行 6 次，第一次预热，后 5 次取中位数；每次新建 Map。
+单位为毫秒。结果受 JIT、GC 和机器负载影响，小规模结果不能直接用于推断复杂度。
+
+random ULLMap, N=1000, 2.624 ms
+random BSTMap, N=1000, 0.223 ms
+random TreeMap, N=1000, 0.209 ms
+random HashMap, N=1000, 0.086 ms
+random ULLMap, N=5000, 76.449 ms
+random BSTMap, N=5000, 0.763 ms
+random TreeMap, N=5000, 0.669 ms
+random HashMap, N=5000, 0.184 ms
+random ULLMap, N=10000, 411.152 ms
+random BSTMap, N=10000, 2.573 ms
+random TreeMap, N=10000, 2.181 ms
+random HashMap, N=10000, 0.364 ms
+
+随机插入中，BSTMap 与 TreeMap 明显快于 ULLMap，HashMap 更快。
+N 从 1000 增至 10000 时，ULLMap 耗时增长远高于 10 倍，符合线性查找累积成近似二次增长的趋势。
+BSTMap 未自平衡，随机输入的表现不能保证有序输入时仍然高效；TreeMap 有平衡保障。
